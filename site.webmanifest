@@ -1,0 +1,22 @@
+{
+    "name": "Razakma Password Generator",
+    "short_name": "Razakma PWGen",
+    "description": "Generator password deterministik dan acak dengan Web Crypto API",
+    "icons": [
+        {
+            "src": "img/android-chrome-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "img/android-chrome-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "rgba(58, 122, 255, 0.3)",
+    "background_color": "#1a1a1a",
+    "display": "standalone",
+    "start_url": "/",
+    "scope": "/"
+}

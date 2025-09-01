@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Razakma Password Generator — Deterministik (frasa) & Acak</title>
+
+  <!-- Favicon untuk berbagai platform -->
+  <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+  <!-- Meta tags untuk mobile -->
+  <meta name="theme-color" content="rgba(58, 122, 255, 0.3)">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Razakma Password Generator">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://razakma.github.io/password-generator/">
+  <meta property="og:title" content="Razakma Password Generator — Deterministik (frasa) & Acak">
+  <meta property="og:description"
+    content="100% Offline, Client-Side Only. Generator password aman menggunakan Web Crypto API. Deterministik dengan frasa atau acak dengan CSPRNG.">
+  <meta property="og:image" content="https://razakma.github.io/password-generator/img/android-chrome-512x512.png">
+  <meta property="og:image:width" content="512">
+  <meta property="og:image:height" content="512">
+  <meta property="og:site_name" content="Razakma Password Generator">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://razakma.github.io/password-generator/">
+  <meta property="twitter:title" content="Razakma Password Generator — Deterministik (frasa) & Acak">
+  <meta property="twitter:description"
+    content="100% Offline, Client-Side Only. Generator password aman menggunakan Web Crypto API. Deterministik dengan frasa atau acak dengan CSPRNG.">
+  <meta property="twitter:image" content="https://razakma.github.io/password-generator/img/android-chrome-512x512.png">
+
+  <!-- Additional meta tags -->
+  <meta name="description"
+    content="100% Offline, Client-Side Only. Generator password aman menggunakan Web Crypto API. Deterministik dengan frasa atau acak dengan CSPRNG.">
+  <meta name="keywords" content="password generator, deterministik, acak, web crypto, offline, client-side, keamanan">
+  <meta name="author" content="Razakma">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="animated-background">
+    <div class="neon-square"></div>
+    <div class="neon-square"></div>
+    <div class="neon-square"></div>
+    <div class="neon-square"></div>
+    <div class="neon-square"></div>
+    <div class="neon-square"></div>
+  </div>
+  <div class="wrap">
+    <header>
+      <h1><span class="lock-icon" style="filter: drop-shadow(0 0 3px rgba(58, 122, 255, 0.7));">🔐</span> Razakma
+        Password
+        Generator — Deterministik (frasa) & Acak</h1>
+      <div class="chips">
+        <span class="chip">🛡️ 100% Offline</span>
+        <span class="chip">🔐 Zero Storage</span>
+        <span class="chip">⚡ Client-Side Only</span>
+        <span class="chip">Web Crypto</span>
+      </div>
+    </header>
+
+    <div class="security-banner">
+      <div class="security-banner-content">
+        <span class="security-banner-icon">🛡️</span>
+        <div class="security-banner-text">
+          <strong>100% Private & Secure</strong>
+          <span>Semua password diproses di browser Anda. Tidak ada data yang dikirim ke server.</span>
+        </div>
+        <span class="security-banner-badge">No Tracking</span>
+      </div>
+    </div>
+
+    <div class="grid">
+      <section class="card">
+        <div class="row" style="justify-content:space-between; margin-bottom:8px">
+          <div class="inline">
+            <strong>Mode</strong>
+            <span class="muted">Pilih otomatis berdasarkan input</span>
+          </div>
+          <div class="chips">
+            <span class="chip" id="modeChip">Acak</span>
+          </div>
+        </div>
+
+        <div style="display:grid; gap:12px">
+          <div>
+            <label for="phrase">Frasa memori (opsional)</label>
+            <div class="hint muted note">Jika diisi, generator menjadi <b>deterministik</b> (hasil sama untuk frasa +
+              opsi yang sama). Masukkan kata-kata yang mudah diingat. Misalnya password untuk instagram, maka kamu bisa
+              menuliskan "Password Razakma untuk instagram" atau apapun yang mudah diingat.</div>
+            <input id="phrase" type="text" placeholder="contoh: razakma instagram" autocomplete="off" />
+          </div>
+          <div>
+            <label for="pepper">Pepper rahasia (opsional tapi direkomendasikan)</label>
+            <div class="hint muted note">Tambahkan <b>pepper rahasia</b> agar lebih kuat. Pepper adalah kode rahasia
+              yang hanya diketahui oleh user dan tidak disimpan di mana pun.</div>
+            <div class="out-row">
+              <input id="pepper" type="password" placeholder="jangan simpan di mana pun" autocomplete="new-password" />
+              <button class="secondary" id="togglePepper" aria-label="Tampilkan/sembyikan pepper">🙈</button>
+            </div>
+          </div>
+        </div>
+
+        <hr style="border:none; border-top:1px solid var(--border); margin:14px 0" />
+
+        <div style="display:grid; gap:12px">
+          <div>
+            <label>Aturan karakter</label>
+            <div class="row" style="gap:18px; flex-wrap:wrap">
+              <label class="inline"><input id="optUpper" type="checkbox" checked /> Uppercase (A–Z)</label>
+              <label class="inline"><input id="optLower" type="checkbox" checked /> Lowercase (a–z)</label>
+              <label class="inline"><input id="optNum" type="checkbox" checked /> Number (0–9)</label>
+              <label class="inline"><input id="optSym" type="checkbox" checked /> Symbol (!@#…)</label>
+            </div>
+            <div class="hint muted note">Minimal pilih satu. Jika kosong, sistem pakai default (semua aktif).</div>
+          </div>
+
+          <div>
+            <label>Panjang</label>
+            <div class="row">
+              <div style="flex:1">
+                <label class="muted" for="min">Min</label>
+                <input id="min" type="number" min="4" max="256" placeholder="(kosongkan jika tak perlu)" />
+              </div>
+              <div style="flex:.2; text-align:center; padding-top:22px">—</div>
+              <div style="flex:1">
+                <label class="muted" for="max">Max</label>
+                <input id="max" type="number" min="4" max="256" placeholder="(kosongkan jika tak perlu)" />
+              </div>
+            </div>
+            <div class="hint muted note">Jika Min/Max kosong, panjang = <b>16</b>. Jika keduanya diisi, panjang dipilih
+              dalam rentang tersebut.</div>
+          </div>
+
+          <div class="actions">
+            <button id="btnGen">Generate</button>
+            <button class="ghost" id="btnClear">Reset</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <label for="out">Hasil</label>
+        <div class="out-row">
+          <input id="out" class="out" type="password" readonly placeholder="(belum ada)" />
+          <button class="secondary" id="toggleOut" aria-label="Tampilkan/Sembunyikan">🙈</button>
+        </div>
+        <div class="copy-section" style="margin-top: 10px;">
+          <button class="secondary" id="btnCopy" disabled>Copy Password</button>
+        </div>
+        <div class="hint" style="margin-top:10px">
+          <div class="kvs">
+            <div class="kv"><strong>Mode</strong>
+              <div id="modeLabel" class="muted">Acak</div>
+            </div>
+            <div class="kv"><strong>Panjang</strong>
+              <div id="lenLabel" class="muted">–</div>
+            </div>
+            <div class="kv"><strong>Entropy (perkiraan)</strong>
+              <div id="entropyLabel" class="muted">–</div>
+            </div>
+            <div class="kv"><strong>Karakter aktif</strong>
+              <div id="charsetLabel" class="muted">–</div>
+            </div>
+          </div>
+        </div>
+        <div class="hint" style="margin-top:12px">
+          <div class="strength" title="Perkiraan kekuatan">
+            <div class="bar" id="bar"></div>
+          </div>
+          <div class="note muted" id="advice" style="margin-top:8px">Gunakan pepper untuk frasa deterministik. Jangan
+            daur ulang frasa yang mudah ditebak.</div>
+        </div>
+        <div class="privacy-notice">
+          <div class="privacy-icon">🔒</div>
+          <div class="privacy-content">
+            <h4>Privasi & Keamanan Terjamin</h4>
+            <p>Password diproses 100% di browser Anda. Tidak ada data yang dikirim ke server atau disimpan oleh
+              aplikasi.</p>
+          </div>
+        </div>
+        <details style="margin-top:12px">
+          <summary>Tips keamanan</summary>
+          <ul>
+            <li><b>Deterministik</b> memudahkan diingat, tapi kekuatan bergantung pada frasa + pepper. Gunakan pepper
+              panjang & unik.</li>
+            <li><b>Acak</b> paling kuat. Simpan di password manager.</li>
+            <li>Aktifkan 2FA di platform penting.</li>
+          </ul>
+        </details>
+      </section>
+    </div>
+
+    <div class="footer muted note">
+      <div>© <span id="currentYear"></span> — Razakma Password Generator — Dibuat dengan <code>Web Crypto</code></div>
+      <div>
+        <label class="inline"><input id="remember" type="checkbox" /> Simpan preferensi (bukan frasa/pepper)</label>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
